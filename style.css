@@ -34,28 +34,22 @@
 
 /* ── Light Mode Tokens ──────────────────────────────────── */
 [data-theme="light"] {
-  --bg:         #f6f7fb;          /* ขาวนวล ไม่แสบตา */
-  --bg-2:       #eef1f8;
-
-  --surface:    rgba(255,255,255,0.7);
-  --surface-2:  rgba(255,255,255,0.9);
-
-  --border:     rgba(30,40,60,0.08);
-  --border-2:   rgba(30,40,60,0.14);
-
-  --ink:        #0a0e1a;
-  --ink-soft:   #1e2a3a;
-  --muted:      #6b7a90;
-
-  --accent:     #6c63ff;
-  --accent-lt:  rgba(108,99,255,0.08);
-  --accent-dk:  #4b44cc;
-
-  --accent-2:   #00bcd4;          /* cyan softer */
-  --accent-3:   #ff7aa2;
-
-  --glow:       rgba(108,99,255,0.15);
-  --glow-2:     rgba(0,188,212,0.1);
+  --bg:         #f0eeff;          /* ม่วงอ่อนๆ แทน #f8f9ff ขาวจัด */
+  --bg-2:       #e6e0ff;          /* ม่วงกลาง แทน #eef1fb */
+  --surface:    rgba(255,255,255,0.72);
+  --surface-2:  rgba(255,255,255,0.92);
+  --border:     rgba(100,80,220,0.12);   /* border ม่วงอ่อน */
+  --border-2:   rgba(100,80,220,0.22);
+  --ink:        #1a1040;          /* ตัวหนังสือม่วงเข้ม */
+  --ink-soft:   #2d1f6e;
+  --muted:      #6b5b95;          /* muted โทนม่วง */
+  --accent:     #5b52f0;
+  --accent-lt:  rgba(91,82,240,0.12);
+  --accent-dk:  #3d36c4;
+  --accent-2:   #0099cc;
+  --accent-3:   #e0457a;
+  --glow:       rgba(91,82,240,0.25);
+  --glow-2:     rgba(0,153,204,0.15);
 }
 
 /* ── Reset ──────────────────────────────────────────────── */
@@ -114,7 +108,7 @@ section    { padding: 7rem 0; }
   transition: background .4s, border-color .3s, box-shadow .3s;
 }
 [data-theme="light"] #nav {
-  background: rgba(248,249,255,0.82);
+  background: rgba(248,249,255,0.82);   /* บรรทัด 107 ที่ต้องแก้ */
 }
 #nav.scrolled {
   box-shadow: 0 4px 32px rgba(0,0,0,.25);
@@ -359,8 +353,8 @@ section    { padding: 7rem 0; }
 }
 [data-theme="light"] .hero-grid {
   background-image:
-    linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
+    linear-gradient(rgba(91,82,240,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91,82,240,0.04) 1px, transparent 1px);
 }
 [data-theme="light"] .hv-card,
 [data-theme="light"] .svc-card,
