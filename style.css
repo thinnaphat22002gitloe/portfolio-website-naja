@@ -364,11 +364,10 @@ section    { padding: 7rem 0; }
   box-shadow: 0 8px 30px rgba(100,120,160,0.08);
 }
 .hero-inner {
-  position: relative; z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5rem;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
   width: 100%;
 }
 
@@ -412,13 +411,18 @@ section    { padding: 7rem 0; }
   background-clip: text;
 }
 .hero-p {
-  font-size: 1.05rem;
-  color: var(--muted);
-  max-width: 460px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 2.5rem;
   line-height: 1.8;
 }
-.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero-btns { 
+  display: flex; 
+  gap: 1rem; 
+  flex-wrap: wrap; 
+  justify-content: center;  /* เพิ่มบรรทัดนี้ */
+}
 
 /* Hero visual cards */
 .hero-visual {
