@@ -34,22 +34,28 @@
 
 /* ── Light Mode Tokens ──────────────────────────────────── */
 [data-theme="light"] {
-  --bg:         #f8f9ff;
-  --bg-2:       #eef1fb;
-  --surface:    rgba(255,255,255,0.8);
-  --surface-2:  rgba(255,255,255,0.95);
-  --border:     rgba(0,0,0,0.07);
-  --border-2:   rgba(0,0,0,0.12);
+  --bg:         #f6f7fb;          /* ขาวนวล ไม่แสบตา */
+  --bg-2:       #eef1f8;
+
+  --surface:    rgba(255,255,255,0.7);
+  --surface-2:  rgba(255,255,255,0.9);
+
+  --border:     rgba(30,40,60,0.08);
+  --border-2:   rgba(30,40,60,0.14);
+
   --ink:        #0a0e1a;
   --ink-soft:   #1e2a3a;
-  --muted:      #5a6a80;
-  --accent:     #5b52f0;
-  --accent-lt:  rgba(91,82,240,0.1);
-  --accent-dk:  #3d36c4;
-  --accent-2:   #0099cc;
-  --accent-3:   #e0457a;
-  --glow:       rgba(91,82,240,0.2);
-  --glow-2:     rgba(0,153,204,0.15);
+  --muted:      #6b7a90;
+
+  --accent:     #6c63ff;
+  --accent-lt:  rgba(108,99,255,0.08);
+  --accent-dk:  #4b44cc;
+
+  --accent-2:   #00bcd4;          /* cyan softer */
+  --accent-3:   #ff7aa2;
+
+  --glow:       rgba(108,99,255,0.15);
+  --glow-2:     rgba(0,188,212,0.1);
 }
 
 /* ── Reset ──────────────────────────────────────────────── */
@@ -353,10 +359,16 @@ section    { padding: 7rem 0; }
 }
 [data-theme="light"] .hero-grid {
   background-image:
-    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
 }
-
+[data-theme="light"] .hv-card,
+[data-theme="light"] .svc-card,
+[data-theme="light"] .proj-card,
+[data-theme="light"] .form-wrap {
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 30px rgba(100,120,160,0.08);
+}
 .hero-inner {
   position: relative; z-index: 1;
   display: grid;
