@@ -34,8 +34,8 @@
 
 /* ── Light Mode Tokens ──────────────────────────────────── */
 [data-theme="light"] {
-  --bg:         #f0eeff;
-  --bg-2:       #e6e0ff;
+  --bg:         #ffffff80;
+  --bg-2:       #e1deff;
   --surface:    rgba(255,255,255,0.72);
   --surface-2:  rgba(255,255,255,0.92);
   --border:     rgba(100,80,220,0.12);
@@ -129,7 +129,7 @@ section    { padding: 7rem 0; }
   flex-shrink: 0;
 }
 .logo-img {
-  height: calc(var(--nav-h) - 12px);
+  height: calc(var(--nav-h) - 1px);
   width: auto;
   display: block;
   object-fit: contain;
