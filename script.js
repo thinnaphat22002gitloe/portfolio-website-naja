@@ -680,3 +680,54 @@ cForm.addEventListener('submit', async (e) => {
 
   requestAnimationFrame(tick);
 })();
+/* ════ About — Horizontal Scroll ════ */
+(function () {
+  const section = document.getElementById('about');
+  const track   = document.getElementById('goalsTrack');
+  const fill    = document.getElementById('aboutProgress');
+  const label   = document.getElementById('aboutLabel');
+  if (!section || !track) return;
+
+  const cards = track.querySelectorAll('.goal-card');
+  const CARD_COUNT = cards.length;
+  let currentX = 0;
+
+  const getCardWidth = () => cards[0]?.offsetWidth || 340;
+  const getGap = () => parseFloat(getComputedStyle(track).gap) || 20;
+  const getVisibleCount = () => window.innerWidth <= 768 ? 1 : 3;
+  const getMaxScroll = () => Math.max(0, (CARD_COUNT - getVisibleCount()) * (getCardWidth() + getGap()));
+
+  function updateProgress(x) {
+    const max = getMaxScroll();
+    const ratio = max > 0 ? Math.min(Math.max(x / max, 0), 1) : 0;
+    const idx = Math.min(Math.round(ratio * (CARD_COUNT - 1)) + 1, CARD_COUNT);
+    if (fill)  fill.style.width  = `${ratio * 100}%`;
+    if (label) label.textContent = `${idx} / ${CARD_COUNT}`;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (window.innerWidth <= 768) return;
+    const rect = section.getBoundingClientRect();
+    const ratio = Math.min(Math.max(-rect.top / (section.offsetHeight - window.innerHeight), 0), 1);
+    currentX = ratio * getMaxScroll();
+    track.style.transition = 'none';
+    track.style.transform  = `translateX(-${currentX}px)`;
+    updateProgress(currentX);
+  }, { passive: true });
+
+  const wrap = track.parentElement;
+  let isDragging = false, dragStartX = 0, dragStartScroll = 0;
+  const setX = x => {
+    currentX = Math.min(Math.max(x, 0), getMaxScroll());
+    track.style.transition = 'transform .05s linear';
+    track.style.transform  = `translateX(-${currentX}px)`;
+    updateProgress(currentX);
+  };
+  wrap.addEventListener('mousedown', e => { isDragging = true; dragStartX = e.clientX; dragStartScroll = currentX; track.style.transition = 'none'; });
+  window.addEventListener('mousemove', e => { if (isDragging) setX(dragStartScroll + (dragStartX - e.clientX)); });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+  wrap.addEventListener('touchstart', e => { dragStartX = e.touches[0].clientX; dragStartScroll = currentX; }, { passive: true });
+  wrap.addEventListener('touchmove',  e => { setX(dragStartScroll + (dragStartX - e.touches[0].clientX)); }, { passive: true });
+
+  updateProgress(0);
+})();
