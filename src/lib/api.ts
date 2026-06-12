@@ -1,3 +1,4 @@
+import { staticSiteContent, usesStaticContent } from '@/data/staticContent';
 import type { ContactPayload, ContactResponse, Project, SiteContent } from '@/types/content';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
@@ -39,14 +40,37 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export async function fetchSiteContent(): Promise<SiteContent> {
-  return request<SiteContent>('/api/v1/content');
+  if (usesStaticContent()) {
+    return staticSiteContent;
+  }
+
+  try {
+    return await request<SiteContent>('/api/v1/content');
+  } catch {
+    return staticSiteContent;
+  }
 }
 
 export async function fetchProjects(): Promise<Project[]> {
-  return request<Project[]>('/api/v1/projects');
+  if (usesStaticContent()) {
+    return staticSiteContent.portfolio.projects;
+  }
+
+  try {
+    return await request<Project[]>('/api/v1/projects');
+  } catch {
+    return staticSiteContent.portfolio.projects;
+  }
 }
 
 export async function submitContact(payload: ContactPayload): Promise<ContactResponse> {
+  if (usesStaticContent()) {
+    throw new ApiError(
+      'Contact form is unavailable on static hosting. Please email us directly.',
+      503,
+    );
+  }
+
   return request<ContactResponse>('/api/v1/contact', {
     method: 'POST',
     body: JSON.stringify(payload),
