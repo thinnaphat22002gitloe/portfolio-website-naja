@@ -229,5 +229,19 @@ export const staticSiteContent: SiteContent = {
 };
 
 export function usesStaticContent(): boolean {
-  return !import.meta.env.VITE_API_URL;
+  const apiUrl = String(import.meta.env.VITE_API_URL ?? '').trim();
+  if (apiUrl.length > 0) {
+    return false;
+  }
+
+  // Local dev uses the Vite proxy even when VITE_API_URL is unset.
+  if (import.meta.env.DEV) {
+    return false;
+  }
+
+  if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
+    return true;
+  }
+
+  return import.meta.env.PROD;
 }

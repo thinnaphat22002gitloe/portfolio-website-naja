@@ -24,7 +24,8 @@ jobs:
 
       - name: Install and Build
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          # GitHub Pages is static-only; bundled content is used instead of the API.
+          VITE_API_URL: ''
           VITE_BASE_PATH: /portfolio-website-naja/
         run: |
           npm install
