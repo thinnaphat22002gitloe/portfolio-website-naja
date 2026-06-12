@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 64" fill="none">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="240" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff8c35"/>
+      <stop offset="0.5" stop-color="#e8405a"/>
+      <stop offset="1" stop-color="#6c63ff"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="8" width="48" height="48" rx="14" fill="url(#g)"/>
+  <text x="28" y="40" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="18" font-weight="700">T</text>
+  <text x="68" y="40" fill="#111827" font-family="Arial,sans-serif" font-size="22" font-weight="800">TMRW</text>
+  <text x="148" y="40" fill="url(#g)" font-family="Arial,sans-serif" font-size="22" font-weight="800">UNLIMIT</text>
+</svg>

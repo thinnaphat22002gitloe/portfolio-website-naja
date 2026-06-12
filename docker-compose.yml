@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tmrw
+      POSTGRES_PASSWORD: tmrw_secret
+      POSTGRES_DB: tmrw
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tmrw -d tmrw"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./tmrw-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql://tmrw:tmrw_secret@db:5432/tmrw
+      CORS_ORIGINS: http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173
+      JWT_SECRET: change-this-in-production
+      ADMIN_EMAIL: admin@tmrw.unlimited
+      ADMIN_PASSWORD: changeme123
+      UPLOAD_DIR: uploads
+    volumes:
+      - uploads:/app/uploads
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:
+  uploads:

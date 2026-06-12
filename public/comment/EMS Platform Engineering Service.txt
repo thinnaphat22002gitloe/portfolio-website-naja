@@ -1,0 +1,38 @@
+
+รูปแบบที่ 1: สำหรับใส่หน้า Portfolio (Project Overview)
+ชื่อโปรเจกต์: EMS Platform Engineering Service
+ประเภทระบบ: Engineering Operations & Asset Management Platform (B2B SaaS / Internal Web Application)
+
+รายละเอียด: > แพลตฟอร์มบริหารจัดการงานวิศวกรรมและการซ่อมบำรุงระบบไฟฟ้าแบบครบวงจร (PM / MA) ออกแบบมาเพื่อเปลี่ยนกระบวนการทำงานของวิศวกรและช่างหน้างานให้อยู่ในรูปแบบดิจิทัล (Digital Transformation) รองรับการจัดระเบียบโครงสร้างข้อมูลเชิงวิศวกรรม (Workbook), การจัดการสินทรัพย์ (Asset Management) เช่น แผงวงจรและมิเตอร์, รวมถึงระบบสร้าง QR Code อัจฉริยะเพื่อให้ลูกค้าสแกนดูข้อมูลสถานะอุปกรณ์ไฟฟ้าเฉพาะตัวได้ทันทีแบบ Real-time
+
+ฟังก์ชันหลักของระบบ (Core Features):
+
+Admin Dashboard: หน้าแสดงผลภาพรวมสถิติจำนวนลูกค้า, โครงการ, แผง/อุปกรณ์ (Panels) และมิเตอร์ (Meters) ทั้งหมดในระบบในรูปแบบสแกนข้อมูลง่าย
+
+Project Center & Setup: ระบบจัดการข้อมูลลูกค้าและสร้างโครงการใหม่แบบเป็นขั้นตอน (Step-by-step Wizard) พร้อมฟังก์ชันวิเคราะห์ Workbook และระบบ Sync ข้อมูลร่วมกับระบบอื่น (AppQ)
+
+Asset Management: ระบบควบคุมและจัดการอุปกรณ์ไฟฟ้า สามารถคัดกรอง แยกประเภทสินทรัพย์ (Panels / Loops / Meters) และรองรับการ Import/Export ข้อมูลผ่านไฟล์ Excel
+
+QR Center (Smart QR Code): ฟีเจอร์สร้าง Dynamic QR Code แยกตามโปรเจกต์หรือตัวอุปกรณ์ (Project, Panel, Loop, Meter QR) เพื่อให้ฝั่งลูกค้า (Customer Portal) สามารถสแกนเพื่อเข้าถึงข้อมูลสินทรัพย์นั้นๆ ได้โดยตรงผ่านสมาร์ทโฟน
+
+Report Center: หน้าออกรายงานการตรวจสอบทางวิศวกรรม (PM / MA) แบบดิจิทัลอัตโนมัติ โดยระบุประเภทงาน, ข้อมูลหน้าปก, ข้อมูลผู้ตรวจ (Inspection By) และผู้อนุมัติ (Approve By)
+
+รูปแบบที่ 2: สำหรับเขียนลงในเรซูเม (Key Achievements)
+(เน้นการใช้ Action Verbs และคำศัพท์ทางเทคนิคเพื่อโชว์ศักยภาพการพัฒนา)
+
+ออกแบบและพัฒนาแพลตฟอร์ม EMS Platform Engineering Service เพื่อจัดการงานซ่อมบำรุงเชิงวิศวกรรม (PM/MA) และระบบการจัดเก็บข้อมูลสินทรัพย์อุปกรณ์ไฟฟ้าแบบรวมศูนย์
+
+พัฒนาฟีเจอร์ QR Center สำหรับสร้าง Dynamic QR Code ลิงก์เข้าสู่ Customer Portal ช่วยให้ผู้ใช้งานหน้างานและลูกค้าเข้าถึงข้อมูลทางเทคนิคของอุปกรณ์ (Panels / Meters) ได้ง่ายผ่านการสแกนด้วยโทรศัพท์มือถือ
+
+ออกแบบสถาปัตยกรรมข้อมูล (Data Architecture) ที่รองรับความสัมพันธ์ของสินทรัพย์ที่มีความซับซ้อนหลายระดับ เช่น โครงการ (Projects) -> แผงควบคุม (Panels) -> ลูประบบ (Loops) -> มิเตอร์ (Meters)
+
+พัฒนาระบบ Digital Report Center เพื่อช่วยวิศวกรในการบันทึกข้อมูลหน้างานและสร้างรายงานผลตรวจสอบวิศวกรรมอย่างเป็นระบบ ลดการใช้เอกสารกระดาษ (Paperless)
+
+구현 (Implement) ระบบซิงค์ข้อมูลโครงสร้างวิศวกรรมผ่าน Workbook และระบบดึงข้อมูล (Sync from AppQ) เพื่อให้ฐานข้อมูลของระบบมีความถูกต้องแม่นยำสูง
+
+🛠️ Tech Stack & Keywords ที่แนะนำให้ระบุ
+(เลือกใส่เพิ่มตามเทคโนโลยีที่คุณใช้จริงได้เลยครับ)
+
+Frontend: [เช่น React.js, Vue.js] / Tailwind CSS (ระบบ UI มีความสะอาดตา รองรับการจัดการ Form ขนาดใหญ่ได้ดี)
+
+Concepts: Asset Management System, IoT & Engineering Dashboard, QR Code Integration, CRUD Operations, B2B Web Application, Preventive Maintenance (PM).

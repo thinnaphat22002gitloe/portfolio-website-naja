@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+!.env.production.example
+*.generated
+tmrw-backend/.env
+tmrw-backend/tmrw.db
+tmrw-backend/uploads/
+__pycache__/
+*.pyc
+.venv/

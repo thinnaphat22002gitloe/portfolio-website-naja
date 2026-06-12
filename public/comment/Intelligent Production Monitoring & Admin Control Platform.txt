@@ -1,0 +1,35 @@
+รูปแบบที่ 1: สำหรับหน้า Portfolio (Overview)
+ชื่อโปรเจกต์: Intelligent Production Monitoring & Admin Control Platform
+
+ประเภทระบบ: Desktop Application (.exe) & Web Dashboard / Operations & Data Management System
+
+รายละเอียด:
+ระบบบริหารจัดการและติดตามประสิทธิภาพการผลิตในโรงงานอัจฉริยะ (Smart Factory) แบบครบวงจร โดยพัฒนาตัวแอปพลิเคชันแยกออกเป็น 2 ส่วนหลักเพื่อตอบโจทย์การใช้งานจริงในองค์กร ได้แก่ โปรแกรมเดสก์ท็อป (.exe) ในรูปแบบ Dark Mode สำหรับติดตั้งเพื่อเปิดมอนิเตอร์สถานะหน้าสายการผลิตโดยตรง และ ระบบเว็บแดชบอร์ดหลังบ้าน (Web Portal) สำหรับทีมผู้บริหารและแอดมิน เพื่อควบคุมสิทธิ์ ตั้งค่าเป้าหมาย และวิเคราะห์ข้อมูลในภาพรวมได้อย่างปลอดภัยและรวดเร็ว
+
+ฟังก์ชันหลักของระบบ (Core Features):
+
+Cross-Platform Delivery (.exe & Web): สถาปัตยกรรมระบบที่แยกการทำงานแบบ Hybrid โดยมีโปรแกรมฝั่ง Client ในรูปแบบ Desktop Executable (.exe) เพื่อรันบนคอมพิวเตอร์หน้าไลน์ผลิต และระบบหน้าเว็บ (Web Application) สำหรับล็อกอินเข้าใช้งานจากภายนอก
+
+Real-time Production Monitor Dashboard: แผงควบคุมดีไซน์ Dark Mode แสดงสถานะเครื่องจักร (RUNNING / STOP) แยกรายไลน์ผลิตย่อย (Line A, B, C) สรุปยอดผลิตสะสม (Today's Output) จำนวนของเสีย (Today's NG) และเวลาที่ไลน์ผลิตหยุดทำงาน (Downtime) พร้อมกราฟเส้นแสดงแนวโน้มยอดการผลิตรายสัปดาห์
+
+Centralized Admin Panel & Authentication: ระบบความปลอดภัยหลังบ้านที่ต้องผ่านหน้าล็อกอิน (Admin Login) เพื่อเข้าสู่แผงควบคุมระบบจัดการข้อมูลส่วนกลาง (User & Data Management) ช่วยในการกรองข้อมูลและจำกัดสิทธิ์ผู้เข้าใช้งาน
+
+Bulk Data Import & KPI Settings: ระบบรองรับการนำเข้าข้อมูลดิบปริมาณมากผ่านการอัปโหลดไฟล์ Excel (Upload Excel) เพื่อส่งเข้าคลังข้อมูล พร้อมหน้าฟอร์มสำหรับปรับแต่งเกณฑ์มาตรฐานการผลิต (Target Output, NG Limit, Downtime Limit) และระบบแจ้งเตือน (System Alerts) เมื่อตัวเลขหน้างานจริงต่ำกว่าเกณฑ์
+
+📌 รูปแบบที่ 2: สำหรับเขียนลงในเรซูเม (Key Achievements)
+(เน้นโชว์ทักษะการทำแอปคู่ขนาน .exe + Web, Handling ข้อมูล และการทำ UI สไตล์ Industrial Dashboard)
+
+ออกแบบและพัฒนาโซลูชันคู่ขนานระหว่าง Desktop Application (.exe) สำหรับเปิดมอนิเตอร์หน้าสายการผลิต และ Web Platform สำหรับผู้ดูแลระบบเพื่อควบคุมข้อมูลจากส่วนกลาง
+
+구현 (Implement) ระบบจัดการหลังบ้าน (Admin Panel) พร้อมระบบยืนยันตัวตน (Authentication) เพื่อความปลอดภัยในการจัดการสิทธิ์ผู้ใช้งาน และควบคุมการอัปเดตเกณฑ์มาตรฐานการผลิต (KPI Target Settings)
+
+พัฒนาระบบนำเข้าข้อมูลการผลิตประสิทธิภาพสูง (Bulk Data Import) รองรับการอัปโหลดและแปลงข้อมูลดิบจากไฟล์ Excel (Excel File Parsing) เข้าสู่ระบบเพื่อประมวลผลต่อได้ทันที
+
+ออกแบบและพัฒนาหน้าจอแดชบอร์ดสรุปผลการผลิต (Production Monitor Dashboard) ในรูปแบบ Dark Mode ที่สแกนง่าย เพื่อลดความเมื่อยล้าทางสายตาของพนักงานหน้างาน พร้อมระบบแสดงกราฟแนวโน้ม (Interactive Trend Charts) และแถบแจ้งเตือนเงื่อนไขความขัดข้องแบบ Real-time
+
+🛠️ Tech Stack & Keywords ที่แนะนำให้ระบุ
+Desktop & Web Technologies: [ใส่ตัวที่คุณใช้จริง เช่น C# .NET (WPF/WinForms), Electron.js, หรือ Python (PyQt)] / React, Vue.js, Node.js
+
+Data Management: Microsoft Excel Integration, SQL Server / MySQL Database, Role-Based Access Control (RBAC)
+
+Core Concepts: Desktop Executable Application (.exe), Client-Server Architecture, Bulk Data Import via Excel, Production KPI Management, Dark Mode Industrial UI, System Alert Monitoring.
