@@ -1,0 +1,34 @@
+รูปแบบที่ 1: สำหรับใส่หน้า Portfolio (Project Overview)
+ชื่อโปรเจกต์: AppQ Premium Workspace (B2B Automated Quotation Platform)
+ประเภทระบบ: B2B Sales Operations & Automated Quotation Platform
+
+รายละเอียด:
+แพลตฟอร์มบริหารจัดการงานขายและออกใบเสนอราคาอัตโนมัติสำหรับธุรกิจวิศวกรรมพลังงานและระบบควบคุมอุตสาหกรรม (SCADA) ออกแบบระบบให้รองรับลูปการทำงานตั้งแต่การล็อกอินผ่าน LINE, การจัดการแพ็กเกจสินค้า, การนำเสนอสไลด์ฟีเจอร์ซอฟต์แวร์ ไปจนถึงการเจนใบเสนอราคาอย่างเป็นทางการ (Quotation) ในรูปแบบ PDF/Excel พร้อมระบบอนุมัติและลงลายมือชื่อดิจิทัล ช่วยเพิ่มความรวดเร็วและแม่นยำในกระบวนการขายขององค์กร
+
+ฟังก์ชันหลักของระบบ (Core Features):
+
+Secure Login & LINE Integration: ระบบเข้าสู่ระบบที่มีความปลอดภัยสูง รองรับการผูกบัญชีและล็อกอินผ่าน LINE (Login/Link via LINE) เพื่อความสะดวกของผู้ใช้งาน
+
+Sales Admin Dashboard: แผงควบคุมแสดงผลตัวชี้วัดสำคัญทางธุรกิจ เช่น ยอดขายรวมจากใบเสนอราคา (Est. Revenue), จำนวนคำสั่งซื้อที่ทำงานอยู่ (Active Orders), จำนวนใบเสนอราคาทั้งหมด (Total Quotations) และรายการที่รออนุมัติ (Pending Approvals)
+
+Dynamic Product & Package Management: ระบบจัดการแพ็กเกจสินค้าตามขนาดขององค์กร (เช่น Standard 25-Meter, Premium 50-Meter, Pro Premium 500-Meter) สามารถกำหนดราคาเหมาจ่าย และตั้งค่าแพ็กเกจยอดนิยม (Popular Package) ได้ทันที
+
+Interactive Presentation CMS: ระบบจัดการเนื้อหาการนำเสนอ (Presentation) หน้าบ้าน แอดมินสามารถอัปโหลดไฟล์สไลด์ (PPT) เพื่อแปลงเป็นพรีเซนเทชันแนะนำฟีเจอร์ซอฟต์แวร์แผงควบคุมและอุปกรณ์ไฟฟ้าให้ลูกค้าดูบนเว็บได้โดยตรง
+
+Automated Quotation Generator: ระบบสร้างใบเสนอราคาอัจฉริยะ สามารถคำนวณราคาสุทธิ, ภาษีมูลค่าเพิ่ม (VAT 7%), แปะเงื่อนไขข้อตกลง (Terms & Conditions) และบันทึกลายเซ็นดิจิทัลของผู้เสนอราคา (Authorized Signature) ลงในเอกสาร พร้อมฟังก์ชันส่งต่อให้ลูกค้าและ Export เป็น Excel หรือ PDF ได้ในคลิกเดียว
+
+รูปแบบที่ 2: สำหรับเขียนลงในเรซูเม (Key Achievements)
+ออกแบบและพัฒนาแพลตฟอร์ม AppQ Premium Workspace ระบบจัดการงานขายและออกใบเสนอราคาอัตโนมัติ (Automated Quotation System) สำหรับสินค้ากลุ่มวิศวกรรมพลังงานและระบบ SCADA
+
+พัฒนาระบบคำนวณราคาและภาษีอัตโนมัติ (Financial Logic) รองรับโครงสร้างราคาสินค้าที่มีความซับซ้อนตามจำนวนมิเตอร์ (Meter-based Pricing) และการจัดการส่วนลด/เงื่อนไขข้อตกลงทางการค้า
+
+구현 (Implement) ฟังก์ชันการจัดทำเอกสารดิจิทัล สามารถแปลงข้อมูลจากหน้าเว็บไปเป็นไฟล์ใบเสนอราคามาตรฐานในรูปแบบ PDF และ Excel ได้อย่างสมบูรณ์ รวมถึงระบบเก็บ Log ลายมือชื่อดิจิทัล (Digital Signature)
+
+พัฒนาระบบเชื่อมต่อสิทธิ์การใช้งาน (OAuth) ด้วยการผูกระบบเข้าสู่ระบบร่วมกับ LINE API (LINE Login) เพื่อยกระดับประสบการณ์การใช้งานของ User
+
+ออกแบบ UI/UX ระดับพรีเมียม (Premium White-Gold UI) ที่เน้นความสะอาดตา สแกนข้อมูลแดชบอร์ดง่าย และมีแบบฟอร์มการกรอกข้อมูลที่ลื่นไหล (Fluid Form Handling)
+
+🛠️ Tech Stack & Keywords ที่แนะนำให้ระบุ
+Frontend: [เช่น React.js, Vue.js] / Tailwind CSS
+
+Concepts: Automated Quotation Builder, PDF/Excel Generation, B2B E-Commerce, LINE OAuth Integration, Financial & Tax Calculation Logic, Business Dashboard.

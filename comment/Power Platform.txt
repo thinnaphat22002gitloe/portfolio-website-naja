@@ -1,0 +1,41 @@
+รูปแบบที่ 1: สรุปสั้นๆ สำหรับใส่ในหน้า Portfolio (Overview)
+ชื่อโปรเจกต์: Enterprise Power Platform Solutions (Digital Workplace & Factory Automation Platform)
+
+ประเภทระบบ: Internal Enterprise Web Application / Process Automation & Business Intelligence (BI) Dashboard
+
+รายละเอียด:
+แพลตฟอร์มแอปพลิเคชันและแดชบอร์ดอัจฉริยะภายในองค์กร พัฒนาขึ้นบน Microsoft Power Platform เพื่อขับเคลื่อนองค์กรสู่การเป็น Paperless Digital Workplace และ Smart Factory เต็มรูปแบบสำหรับผู้ใช้งานในระบบ Microsoft 365 โดยเปลี่ยนกระบวนการทำงานที่เคยใช้กระดาษและระบบแมนนวลให้เป็นออนไลน์ 100% แก้ไขปัญหาเรื่องเอกสารสูญหายได้อย่างเด็ดขาด ระบบโดดเด่นด้านการออกแบบ UI/UX ที่เรียบง่าย จัดการขอบข่ายงาน (Workflow) สิทธิ์การเข้าถึง และการแสดงผลข้อมูลเชิงลึก (Data Visualization) ช่วยให้พนักงานและผู้บริหารติดตามสถานะงาน วิดีโอคู่มือ และประสิทธิภาพการผลิตได้ทันทีแบบ Real-time จากหน้าแอปพลิเคชัน
+
+ฟังก์ชันหลักของระบบ (Core Features):
+
+Paperless FA Online Approval Workflow: ระบบฟอร์มขออนุมัติตัวอย่างผลิตภัณฑ์ (First Article) บน Power Apps ที่เข้ามาแทนที่เอกสารกระดาษ รองรับการสร้างคำขอผ่านฟอร์มดิจิทัล และส่งต่อเอกสารผ่าน Power Automate ไปยังผู้มีอำนาจอนุมัติ (Chief Engineer / Manager) ตามลำดับขั้นโดยอัตโนมัติ พร้อมหน้าระบบแยกสิทธิ์ติดตามงานของทีมวิศวกร (Engineer Section) ช่วยให้ผู้ส่งเช็กสถานะการอนุมัติได้ทันทีจากหน้าจอแอป
+
+Smart Factory Production Dashboard: หน้าจอแดชบอร์ดสไตล์ Dark Mode สำหรับมอนิเตอร์สถานะไลน์การผลิตย่อย (Line A, Line B, Line C) แสดงผลสถานะเครื่องจักร (RUNNING / STOP) สถิติยอดผลิตประจำวัน (Today's Output) ของเสีย (Today's NG) และเวลาที่เครื่องจักรหยุดทำงาน (Downtime) ออกแบบมาให้สแกนข้อมูลภาพรวมได้อย่างรวดเร็ว
+
+Admin Control Panel & KPI Settings: ระบบควบคุมหลังบ้านสำหรับผู้ดูแลระบบ (Admin) เพื่อบริหารจัดการเกณฑ์เป้าหมายการผลิต (Target Output, NG Limit, Downtime Limit) และรองรับระบบนำเข้าข้อมูลการผลิต (Data Import) ผ่านการอัปโหลดไฟล์ Excel เข้าสู่ฐานข้อมูลกลาง พร้อมระบบแถบแจ้งเตือน (System Alerts) บนหน้าแอปอัตโนมัติเมื่อประสิทธิภาพต่ำกว่าเป้าหมาย
+
+Material Inventory & Variance Analytics: หน้าจอรายงานเชิงวิเคราะห์ข้อมูลสต็อกและปริมาณการใช้วัตถุดิบ (ลวดทองแดง) โดยดึงข้อมูลมาประมวลผลเปรียบเทียบปริมาณการใช้งานจริง (Actual) กับมาตรฐาน (Standard) ออกมาเป็นค่าความเบี่ยงเบน (Variance KG) ในรูปแบบ Interactive Charts ร่วมกับตัวกรองข้อมูลช่วงเวลา (Date Slicer) และมีระบบ Conditional Formatting ไฮไลต์แถบสีแดงอัตโนมัติเมื่อสต็อกเกิดความผิดปกติ
+
+OSLR Multimedia Hub & EMR (Equipment Maintenance Record): แพลตฟอร์มทวิภาคที่รวม 2 โมดูลหลัก ได้แก่ OSLR Player ระบบคลังวิดีโอสาธิตคู่มือมาตรฐานการทำงาน (SOP Video) แยกตามโมเดลสินค้าและสถานีงาน (Station 1-7) เพื่อใช้ฝึกอบรมพนักงาน และ EMR แผงควบคุมบันทึกประวัติ ตรวจสอบสถานะเครื่องจักร และแจ้งเตือนแผนซ่อมบำรุงที่เกินกำหนด (Overdue!) เพื่อลดเวลาเครื่องจักรหยุดทำงาน
+
+รูปแบบที่ 2: สำหรับเขียนลงในเรซูเม (Key Achievements)
+(เน้นการโชว์ศักยภาพการทำระบบด้วย Low-Code, การจัดการ Workflow, และ Business Intelligence)
+
+ออกแบบและพัฒนาระบบนิเวศน์แอปพลิเคชันภายในองค์กรด้วย Power Platform (Power Apps, Power Automate) เพื่อเปลี่ยนกระบวนการทำงานในโรงงานจากเอกสารกระดาษสู่ระบบดิจิทัล ช่วยลดปัญหาเอกสารสูญหายและติดตามสถานะได้ทันที (Paperless Solution)
+
+ออกแบบและจัดทำระบบจัดส่งคำขอและอนุมัติเอกสารอัตโนมัติ (Automated Approval Workflow) แยกตามลำดับขั้นและสิทธิ์การเข้าถึงของแต่ละแผนก (Role-Based Access Control) ช่วยเพิ่มความโปร่งใสและลดระยะเวลากระบวนการอนุมัติระหว่างฝ่ายจัดซื้อ ฝ่ายวิศวกรรม และผู้บริหาร
+
+구현 (Implement) ระบบ Data Visualization และ Production Monitoring Dashboard ทั้งในรูปแบบ Dark Mode บน Power Apps และแบบ Interactive บน Power BI เพื่อแปลงข้อมูลดิบของไลน์ผลิตและคลังวัตถุดิบ ให้เป็นกราฟวิเคราะห์ผลต่าง (Variance) และประสิทธิภาพการผลิต (%) ที่สแกนง่าย
+
+พัฒนาระบบควบคุมหลังบ้าน (Admin Control Panel) สำหรับผู้ดูแลระบบ เพื่อใช้ในการตั้งค่าเกณฑ์เป้าหมาย (KPI Settings), แสดงแถบแจ้งเตือนความผิดปกติของระบบ (System Alerts) และรองรับกระบวนการนำเข้าข้อมูลการผลิต (Bulk Data Import) จากไฟล์ Excel
+
+ออกแบบการจัดการข้อมูลมัลติมีเดีย (Video Streaming Integration) และประวัติการซ่อมบำรุงเครื่องจักร (Equipment Maintenance Record) เชื่อมโยงเข้าเป็นแอปพลิเคชันเดียวกัน เพื่ออำนวยความสะดวกในการฝึกอบรมพนักงานและวางแผนซ่อมบำรุงเชิงป้องกัน (Preventive Maintenance)
+
+🛠️ Tech Stack & Keywords ที่แนะนำให้ระบุ
+Core Platform: Microsoft Power Platform (Power Apps Canvas App, Power Automate Cloud Flows, Power BI Desktop / Service)
+
+Data Sources & Storage: SharePoint Lists / Microsoft Dataverse / Excel Online
+
+Multimedia Integration: Microsoft Stream / SharePoint Video Libraries
+
+Core Concepts: Low-Code Development, Business Process Automation (BPA), Paperless Enterprise Workflow, Data Visualization Dashboard, Factory Production Monitoring, Inventory Variance Analytics, Interactive Filtering (Slicers), UI/UX Dashboard Design (Dark Mode).
