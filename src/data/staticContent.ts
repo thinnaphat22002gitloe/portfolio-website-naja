@@ -156,7 +156,7 @@ const PROJECTS: Project[] = [
 ];
 
 export const staticSiteContent: SiteContent = {
-  logoUrl: `${import.meta.env.BASE_URL}assets/logo.svg`,
+  logoUrl: '/assets/logo.svg',
   hero: {
     badge: 'Software Development · Thailand',
     headline: 'We Build Technology',
