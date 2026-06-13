@@ -19,7 +19,7 @@ class SiteSettings(Base):
     contact_address: Mapped[str] = mapped_column(String(255))
     working_hours: Mapped[str] = mapped_column(String(255))
     social_links: Mapped[str] = mapped_column(Text)
-    logo_url: Mapped[str] = mapped_column(String(512), default="/assets/logo.svg")
+    logo_url: Mapped[str] = mapped_column(String(512), default="/logo/LOGO UNBG2.png")
 
 
 class AboutCard(Base):

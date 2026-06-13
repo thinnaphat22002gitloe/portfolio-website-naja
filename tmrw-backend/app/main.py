@@ -13,7 +13,6 @@ from app.routers.public import router as public_router
 from app.services.auth import seed_admin_user
 from app.services.content import seed_database
 from app.services.migrate import run_migrations
-from app.services.placeholders import seed_project_placeholders
 from app.services.upload import ensure_upload_dir
 
 logger = logging.getLogger(__name__)
@@ -31,7 +30,6 @@ async def lifespan(_: FastAPI):
     try:
         seed_database(db)
         seed_admin_user(db)
-        seed_project_placeholders(db)
     finally:
         db.close()
     yield

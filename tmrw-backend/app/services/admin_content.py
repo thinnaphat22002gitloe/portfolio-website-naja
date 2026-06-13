@@ -293,7 +293,7 @@ def get_site_settings(db: Session) -> dict | None:
         "contactPhone": settings.contact_phone,
         "contactAddress": settings.contact_address,
         "workingHours": settings.working_hours,
-        "logoUrl": getattr(settings, "logo_url", None) or "/assets/logo.svg",
+        "logoUrl": getattr(settings, "logo_url", None) or "/logo/LOGO UNBG2.png",
         "socialLinks": json.loads(settings.social_links),
     }
 

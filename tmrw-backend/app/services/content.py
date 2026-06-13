@@ -27,11 +27,15 @@ def slugify(value: str) -> str:
 
 
 def build_image_path(prefix: str, index: int) -> str:
-    return f"/portfolio-website-naja/picture/{prefix}{index}.png"
+    return f"/picture/{prefix}{index}.png"
 
 
 def build_project_images(project: Project) -> list[str]:
-    uploaded = [image.url for image in sorted(getattr(project, "images", []), key=lambda item: item.sort_order)]
+    uploaded = [
+        image.url
+        for image in sorted(getattr(project, "images", []), key=lambda item: item.sort_order)
+        if "placeholder-" not in image.url
+    ]
     if uploaded:
         return uploaded
     return [
@@ -194,7 +198,7 @@ def seed_database(db: Session) -> None:
             contact_address="Bangkok, Thailand",
             working_hours="Mon — Fri, 9AM — 6PM",
             social_links=social_links,
-            logo_url="/assets/logo.svg",
+            logo_url="/logo/LOGO UNBG2.png",
         )
     )
 
@@ -317,7 +321,7 @@ def build_site_content(db: Session) -> dict:
     social_links = json.loads(settings.social_links)
 
     return {
-        "logoUrl": getattr(settings, "logo_url", None) or "/assets/logo.svg",
+        "logoUrl": getattr(settings, "logo_url", None) or "/logo/LOGO UNBG2.png",
         "hero": {
             "badge": settings.hero_badge,
             "headline": settings.hero_headline,

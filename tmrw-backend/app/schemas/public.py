@@ -90,7 +90,7 @@ class ContactContent(BaseModel):
 
 
 class SiteContent(BaseModel):
-    logoUrl: str = "/assets/logo.svg"
+    logoUrl: str = "/logo/LOGO UNBG2.png"
     hero: HeroContent
     about: AboutContent
     services: ServicesContent

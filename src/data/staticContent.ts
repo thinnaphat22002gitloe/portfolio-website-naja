@@ -1,8 +1,7 @@
 import type { Project, SiteContent } from '@/types/content';
 
 function buildImagePath(prefix: string, index: number): string {
-  const base = import.meta.env.BASE_URL;
-  return `${base}picture/${prefix}${index}.png`;
+  return `/picture/${prefix}${index}.png`;
 }
 
 function buildProjectImages(prefix: string, startIndex: number, count: number): string[] {
@@ -156,7 +155,7 @@ const PROJECTS: Project[] = [
 ];
 
 export const staticSiteContent: SiteContent = {
-  logoUrl: '/assets/logo.svg',
+  logoUrl: '/logo/LOGO UNBG2.png',
   hero: {
     badge: 'Software Development · Thailand',
     headline: 'We Build Technology',
