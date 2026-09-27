@@ -34,9 +34,10 @@ const emptyProject: ProjectPayload = {
 };
 
 export function AdminProjectEditPage() {
-  const [, params] = useRoute('/admin/projects/:id');
-  const isNew = params?.id === 'new';
-  const projectId = isNew ? null : Number(params?.id);
+  const [, params] = useRoute<{ id: string }>('/admin/projects/:id');
+  const rawId = params?.id;
+  const isNew = rawId === 'new';
+  const projectId = isNew || !rawId ? null : Number(rawId);
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [form, setForm] = useState<ProjectPayload>(emptyProject);

@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useSiteContent } from '@/context/SiteContentContext';
 import { ApiError, submitContact } from '@/lib/api';
+import type { ContactPayload } from '@/types/content';
 
 const formSchema = z.object({
   firstName: z.string().min(2, 'First name is required'),
@@ -70,7 +71,15 @@ export function Contact() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      const response = await submitContact(values);
+      const payload: ContactPayload = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        company: values.company || undefined,
+        service: values.service,
+        message: values.message,
+      };
+      const response = await submitContact(payload);
       toast({
         title: "Message Sent Successfully",
         description: response.message,
