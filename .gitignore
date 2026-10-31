@@ -12,3 +12,7 @@ __pycache__/
 *.pyc
 .venv/
 portfolio-website-naja-main/
+
+_mockapps/node_modules/
+_mockapps/apps/
+_mockapps/out/

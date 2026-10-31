@@ -1,11 +1,14 @@
 import uuid
+from datetime import UTC, datetime
 from pathlib import Path
 
 from fastapi import HTTPException, UploadFile, status
 
 from app.config import settings
 
-ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"}
+# SVG is intentionally not accepted: uploaded SVGs are served from the same origin
+# and can carry scripts. Use PNG/JPG/WebP for uploads.
+ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
 
 
 def ensure_upload_dir() -> Path:
@@ -35,3 +38,21 @@ async def save_upload_file(file: UploadFile) -> tuple[str, str]:
 
     url = f"/uploads/projects/{filename}"
     return url, filename
+
+
+def list_uploads() -> list[dict]:
+    upload_dir = ensure_upload_dir() / "projects"
+    items = []
+    for path in upload_dir.iterdir():
+        if path.is_file() and path.suffix.lower() in ALLOWED_EXTENSIONS | {".svg"}:
+            stat = path.stat()
+            items.append(
+                {
+                    "url": f"/uploads/projects/{path.name}",
+                    "filename": path.name,
+                    "size": stat.st_size,
+                    "modifiedAt": datetime.fromtimestamp(stat.st_mtime, UTC),
+                }
+            )
+    items.sort(key=lambda item: item["modifiedAt"], reverse=True)
+    return items

@@ -23,6 +23,12 @@ export function resolveMediaUrl(path: string): string {
 function encodeAssetPath(path: string): string {
   return path
     .split('/')
-    .map((segment) => (segment ? encodeURIComponent(segment) : ''))
+    .map((segment) => (segment ? encodeSegment(segment) : ''))
     .join('/');
+}
+
+// encodeURIComponent also escapes RFC 3986 sub-delims ("&", "+", ",", ...) that are legal in a path.
+// Some static servers (incl. Vite dev) don't decode e.g. %26, so keep those characters literal.
+function encodeSegment(segment: string): string {
+  return encodeURIComponent(segment).replace(/%(26|2B|2C|3B|3D|40|24|21)/gi, (m) => decodeURIComponent(m));
 }

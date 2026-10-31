@@ -1,4 +1,5 @@
 import type { Project, SiteContent } from '@/types/content';
+import { MOCK_PROJECTS } from '@/data/mockProjects';
 
 function buildImagePath(prefix: string, index: number): string {
   return `/picture/${prefix}${index}.png`;
@@ -206,7 +207,7 @@ export const staticSiteContent: SiteContent = {
     sectionLabel: '03 — PORTFOLIO',
     title: 'Latest Work',
     description: 'สัมผัสประสบการณ์นวัตกรรมดิจิทัลที่เราสร้างสรรค์ขึ้น เพื่อตอบโจทย์ความต้องการที่ท้าทายของธุรกิจยุคใหม่',
-    projects: PROJECTS,
+    projects: [...PROJECTS, ...MOCK_PROJECTS],
   },
   contact: {
     sectionLabel: '04 — CONTACT',

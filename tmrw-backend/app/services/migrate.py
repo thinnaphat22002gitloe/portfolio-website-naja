@@ -29,3 +29,10 @@ def run_migrations() -> None:
             connection.execute(
                 text("DELETE FROM project_images WHERE url LIKE '%placeholder-%'")
             )
+
+    if inspector.has_table("projects"):
+        project_columns = {column["name"] for column in inspector.get_columns("projects")}
+        if "is_mock" not in project_columns:
+            with engine.begin() as connection:
+                connection.execute(text("ALTER TABLE projects ADD COLUMN is_mock BOOLEAN DEFAULT 0"))
+                connection.execute(text("UPDATE projects SET is_mock = 0 WHERE is_mock IS NULL"))

@@ -20,8 +20,8 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    if settings.is_production and settings.jwt_secret == "dev-secret-change-in-production":
-        logger.warning("JWT_SECRET is using the default value in production")
+    if settings.jwt_secret_is_ephemeral:
+        logger.warning("JWT_SECRET not set: using a random per-process secret (admin sessions reset on restart).")
 
     Base.metadata.create_all(bind=engine)
     run_migrations()

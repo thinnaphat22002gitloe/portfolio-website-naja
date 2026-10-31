@@ -14,12 +14,16 @@ class Settings(BaseSettings):
     smtp_password: str = ""
     contact_rate_limit_per_hour: int = 10
 
-    jwt_secret: str = "dev-secret-change-in-production"
+    # Secrets come from tmrw-backend/.env (see .env.example). No secret is shipped in code:
+    # if JWT_SECRET is empty a random per-process secret is generated (dev only).
+    jwt_secret: str = ""
+    jwt_secret_is_ephemeral: bool = False
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 60 * 24
 
     admin_email: str = "admin@tmrw.unlimited"
-    admin_password: str = "changeme123"
+    # Initial admin password (only used to create the first admin account). Set in .env.
+    admin_password: str = ""
     admin_name: str = "TMRW Admin"
 
     upload_dir: str = "uploads"
@@ -36,3 +40,11 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+if not settings.jwt_secret:
+    if settings.is_production:
+        raise RuntimeError("JWT_SECRET must be set in production (see tmrw-backend/.env.example)")
+    import secrets as _secrets
+
+    settings.jwt_secret = _secrets.token_urlsafe(48)
+    settings.jwt_secret_is_ephemeral = True

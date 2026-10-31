@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Rocket, Zap, Brain, TrendingUp, Users, Maximize, type LucideIcon } from 'lucide-react';
+import { AnimatedCounter } from '@/components/fx/AnimatedCounter';
 import { useSiteContent } from '@/context/SiteContentContext';
 
 const iconMap: Record<string, LucideIcon> = {
@@ -59,7 +60,7 @@ export function About() {
                     y: -8,
                     boxShadow: "0 16px 32px -8px rgba(0, 0, 0, 0.1)"
                   }}
-                  className="p-10 rounded-3xl bg-card dark:bg-card/90 border border-border transition-all duration-500 group shadow-lg cursor-default"
+                  className="relative overflow-hidden p-10 rounded-3xl bg-card dark:bg-card/90 border border-border transition-all duration-500 group shadow-lg cursor-default hover:border-primary/40 before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-primary before:via-secondary before:to-accent before:scale-x-0 before:origin-left before:transition-transform before:duration-500 hover:before:scale-x-100"
                 >
                   <div className="w-16 h-16 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-xl">
                     <Icon size={32} />
@@ -84,7 +85,7 @@ export function About() {
                 {index > 0 && <div className="w-1 h-12 bg-primary/20 hidden md:block" />}
                 <div className="text-center group">
                   <h4 className={`text-5xl md:text-6xl font-black mb-3 tracking-tighter group-hover:scale-110 transition-transform ${index === 0 ? 'text-primary' : index === 1 ? 'text-secondary' : 'text-accent'}`}>
-                    {stat.value}
+                    <AnimatedCounter value={stat.value} />
                   </h4>
                   <p className="text-foreground text-sm uppercase tracking-[0.35em] font-bold">{stat.label}</p>
                 </div>

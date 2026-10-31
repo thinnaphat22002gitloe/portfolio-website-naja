@@ -60,6 +60,7 @@ class ProjectOut(BaseModel):
     imageStartIndex: int
     coverImage: str
     images: list[str]
+    isMock: bool = False
 
 
 class PortfolioContent(BaseModel):

@@ -70,6 +70,7 @@ class Project(Base):
     image_count: Mapped[int] = mapped_column(Integer, default=1)
     sort_order: Mapped[int] = mapped_column(Integer, default=0)
     is_published: Mapped[bool] = mapped_column(Boolean, default=True)
+    is_mock: Mapped[bool] = mapped_column(Boolean, default=False)
 
     features: Mapped[list["ProjectFeature"]] = relationship(back_populates="project", cascade="all, delete-orphan")
     tags: Mapped[list["ProjectTag"]] = relationship(back_populates="project", cascade="all, delete-orphan")
@@ -133,3 +134,12 @@ class AdminUser(Base):
     role: Mapped[str] = mapped_column(String(32), default="admin")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class AppMeta(Base):
+    """Small key/value table for one-off data markers (e.g. which seeds have run)."""
+
+    __tablename__ = "app_meta"
+
+    key: Mapped[str] = mapped_column(String(128), primary_key=True)
+    value: Mapped[str] = mapped_column(Text, default="")

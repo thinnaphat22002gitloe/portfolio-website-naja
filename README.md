@@ -219,10 +219,28 @@ npm run docker:down
 สามารถเข้าสู่ระบบจัดการข้อมูลหลังบ้านได้ที่ URL:
 👉 **`http://localhost:5173/portfolio-website-naja/admin/login`**
 
-- **Default Email**: `admin@tmrw.unlimited`
-- **Default Password**: `changeme123`
+ค่าเริ่มต้นสำหรับ **development เท่านั้น** มาจากไฟล์ `tmrw-backend/.env` (คัดลอกจาก `tmrw-backend/.env.example`):
 
-*(สามารถแก้ไขรหัสผ่านได้ผ่านทาง Environment Variable หรือหน้า Settings หลังบ้าน)*
+- **Dev Email**: `admin@tmrw.unlimited`
+- **Dev Password**: `changeme123`
+
+> ⚠️ ตัวโค้ดไม่มีรหัสผ่านหรือ secret ฝังอยู่ ถ้าไม่ได้ตั้ง `ADMIN_PASSWORD` ระบบจะไม่สร้างบัญชีแอดมิน และถ้า `APP_ENV=production` ระบบจะปฏิเสธรหัสผ่านอ่อนอย่าง `changeme123` พร้อมบังคับให้ต้องตั้ง `JWT_SECRET`
+> ในโหมด dev ถ้าไม่ตั้ง `JWT_SECRET` ระบบจะสุ่มคีย์ใหม่ทุกครั้งที่เปิด (ต้องล็อกอินใหม่หลังรีสตาร์ต backend)
+> หากล็อกอินผิด 5 ครั้งภายใน 5 นาที ระบบจะตอบ HTTP 429 (rate limit)
+
+### เมนูหลังบ้าน
+| หน้า | สิ่งที่ทำได้ |
+|---|---|
+| Dashboard | สถิติผลงาน / เผยแพร่ / ผลงานตัวอย่าง (mock) / ข้อความติดต่อล่าสุด |
+| Projects | ค้นหา, เปิด/ปิดการเผยแพร่ (switch), จัดลำดับขึ้น-ลง, แก้ไข, ลบ (มีป้าย **Mock** สำหรับผลงานตัวอย่าง) |
+| Project Edit | แก้ข้อมูล, อัปโหลดรูปหลายไฟล์, ตั้งรูปปก, เรียงรูป, เอารูปออก, เพิ่ม path รูปที่มีอยู่แล้ว (`/picture/...`) |
+| Services / Contacts / Settings | จัดการบริการ, ข้อความจากฟอร์มติดต่อ, ข้อมูลเว็บไซต์และโลโก้ |
+| Media | ดูไฟล์ที่อัปโหลด (`/uploads/...`), อัปโหลดเพิ่ม, คัดลอก path |
+
+### ผลงานตัวอย่าง (Mock Projects)
+มีผลงานตัวอย่าง 6 ชิ้น (#07–#12) ที่ใช้รูป `public/picture/mock-*.png` แสดงทั้งในโหมด static (`src/data/mockProjects.ts`) และ seed ลงฐานข้อมูล (`tmrw-backend/app/services/mock_projects.py`) ในฐานข้อมูลจะมีป้าย `isMock` ลบออกได้จากหน้า Projects และเมื่อลบแล้วจะไม่ถูก seed กลับมาอีก
+ถ้าจะเอาออกจากเว็บโหมด static ให้ลบ `...MOCK_PROJECTS` ออกจาก `src/data/staticContent.ts`
+รูปตัวอย่างสร้างใหม่ได้ด้วยสคริปต์ `scripts/gen-mockups.mjs` (ต้องมี `playwright-core` และ Chrome)
 
 ---
 
@@ -240,9 +258,9 @@ npm run docker:down
 |---|---|---|
 | `APP_ENV` | สภาพแวดล้อม (`development` / `production`) | `development` |
 | `DATABASE_URL` | เชื่อมต่อฐานข้อมูล (SQLite หรือ PostgreSQL) | `sqlite:///./tmrw.db` |
-| `JWT_SECRET` | Secret key สำหรับถอดรหัส JWT | (ระบุคีย์ความปลอดภัยสูง) |
+| `JWT_SECRET` | Secret key สำหรับเซ็น JWT (ต้องตั้งใน production) | ว่าง = สุ่มคีย์ใหม่ทุกครั้งที่เปิด (dev) |
 | `ADMIN_EMAIL` | อีเมลแอดมินเริ่มต้น | `admin@tmrw.unlimited` |
-| `ADMIN_PASSWORD` | รหัสผ่านแอดมินเริ่มต้น | `changeme123` |
+| `ADMIN_PASSWORD` | รหัสผ่านแอดมินเริ่มต้น (ใช้ตอนสร้างบัญชีครั้งแรก) | ว่าง (ใน `.env.example` ใส่ `changeme123` ไว้สำหรับ dev) |
 | `CORS_ORIGINS` | โดเมนที่อนุญาตให้เรียกใช้ API | `http://localhost:5173,http://127.0.0.1:5173` |
 
 ---
@@ -288,3 +306,7 @@ npm run docker:down
 - **TMRW UNLIMIT Team** — We Build Technology That Moves You Forward.
 - Contact: `Ruttinon@gmail.com` | `090 669 8821`
 - License: MIT License
+## Mock project screenshots
+
+Sample projects #07�#12 use real screenshots of small mock apps in `_mockapps/`. To regenerate: `cd _mockapps; npm i; $env:CHROME_PATH='C:\Program Files\Google\Chrome\Application\chrome.exe'; node src/build.mjs apps ..\public\picture` � see `_mockapps/README.md`.
+

@@ -1,10 +1,18 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronLeft, X } from 'lucide-react';
 import { useSiteContent } from '@/context/SiteContentContext';
 import { resolveMediaUrl } from '@/lib/media';
 import type { Project } from '@/types/content';
+
+const FILTER_GROUPS = [
+  { label: 'Web App', match: /web|portal|saas|marketplace|e-commerce/ },
+  { label: 'Mobile', match: /mobile|react native|flutter|ios|android/ },
+  { label: 'Dashboard & BI', match: /dashboard|analytics|\bbi\b|data/ },
+  { label: 'Enterprise', match: /enterprise|b2b|internal|operations|asset|desktop/ },
+  { label: 'AI', match: /\bai\b|llm|chatbot|rag|machine learning/ },
+];
 
 interface PortfolioProps {
   selectedProject: Project | null;
@@ -14,6 +22,24 @@ interface PortfolioProps {
 export function Portfolio({ selectedProject, setSelectedProject }: PortfolioProps) {
   const { portfolio } = useSiteContent();
   const [currentImgIdx, setCurrentImgIdx] = useState(0);
+  const [filter, setFilter] = useState('All');
+  const groupsOf = (project: Project) => {
+    const text = `${project.category} ${project.tags.join(' ')}`.toLowerCase();
+    return FILTER_GROUPS.filter((g) => g.match.test(text)).map((g) => g.label);
+  };
+  const categories = useMemo(() => {
+    const present = new Set(portfolio.projects.flatMap(groupsOf));
+    return ['All', ...FILTER_GROUPS.map((g) => g.label).filter((l) => present.has(l))];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [portfolio.projects]);
+  const visibleProjects = useMemo(
+    () => (filter === 'All' ? portfolio.projects : portfolio.projects.filter((p) => groupsOf(p).includes(filter))),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filter, portfolio.projects],
+  );
+  const galleryOf = (project: Project) =>
+    project.images.length > 0 ? project.images : project.coverImage ? [project.coverImage] : [];
+  const imageTotal = selectedProject ? Math.max(galleryOf(selectedProject).length, 1) : 1;
   const portalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -39,16 +65,27 @@ export function Portfolio({ selectedProject, setSelectedProject }: PortfolioProp
   const nextImg = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     if (selectedProject) {
-      setCurrentImgIdx((prev) => (prev + 1) % selectedProject.imageCount);
+      setCurrentImgIdx((prev) => (prev + 1) % imageTotal);
     }
   };
 
   const prevImg = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     if (selectedProject) {
-      setCurrentImgIdx((prev) => (prev - 1 + selectedProject.imageCount) % selectedProject.imageCount);
+      setCurrentImgIdx((prev) => (prev - 1 + imageTotal) % imageTotal);
     }
   };
+
+  useEffect(() => {
+    if (!selectedProject) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedProject(null);
+      if (e.key === 'ArrowRight') setCurrentImgIdx((prev) => (prev + 1) % imageTotal);
+      if (e.key === 'ArrowLeft') setCurrentImgIdx((prev) => (prev - 1 + imageTotal) % imageTotal);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selectedProject, imageTotal, setSelectedProject]);
 
   const getImageSrc = (project: Project, offset: number) => {
     if (project.images.length > 0) {
@@ -75,24 +112,52 @@ export function Portfolio({ selectedProject, setSelectedProject }: PortfolioProp
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {portfolio.projects.map((project, idx) => (
+        {categories.length > 2 && (
+          <div className="mb-12 -mt-8 flex flex-wrap gap-2" role="tablist" aria-label="Filter projects">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                role="tab"
+                aria-selected={filter === cat}
+                onClick={() => setFilter(cat)}
+                className={`relative rounded-full px-5 py-2 text-sm font-bold transition-colors ${filter === cat ? 'text-primary-foreground' : 'border border-border bg-card/70 text-foreground hover:border-primary/50'}`}
+              >
+                {filter === cat && (
+                  <motion.span layoutId="portfolio-filter" className="absolute inset-0 rounded-full bg-primary" transition={{ type: 'spring', stiffness: 400, damping: 32 }} />
+                )}
+                <span className="relative">{cat}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        <motion.div layout className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <AnimatePresence mode="popLayout">
+          {visibleProjects.map((project, idx) => (
             <motion.div
+              layout
               key={project.id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ delay: idx * 0.1, duration: 0.8 }}
+              transition={{ delay: (idx % 2) * 0.1, duration: 0.7 }}
               onClick={() => openProject(project)}
-              className="group relative h-[420px] rounded-3xl overflow-hidden cursor-pointer border border-border shadow-lg hover:shadow-2xl transition-all duration-500"
+              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), openProject(project))}
+              role="button"
+              tabIndex={0}
+              aria-label={`Open ${project.title}`}
+              className="group relative h-[360px] sm:h-[420px] rounded-3xl overflow-hidden cursor-pointer border border-border shadow-lg hover:shadow-2xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40 transition-all duration-500"
             >
               <div className="absolute inset-0 bg-muted transition-transform duration-700 group-hover:scale-105">
                 <img
                   src={resolveMediaUrl(project.coverImage || getImageSrc(project, 0))}
                   alt={project.title}
-                  className="absolute inset-0 w-full h-full object-contain opacity-60 group-hover:opacity-80 transition-all duration-700"
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover object-top transition-all duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent group-hover:via-background/40 transition-all duration-500" />
 
                 <div className="absolute top-8 left-8 px-5 py-2 rounded-full bg-card/80 backdrop-blur-md border border-border text-sm font-bold text-foreground shadow-lg">
                   {project.category}
@@ -102,22 +167,28 @@ export function Portfolio({ selectedProject, setSelectedProject }: PortfolioProp
                   <ArrowRight size={24} />
                 </div>
 
-                <span className="absolute bottom-8 left-8 text-7xl font-black text-foreground/30 dark:text-white/20 group-hover:text-primary/30 dark:group-hover:text-primary/40 transition-colors">
+                <span className="absolute top-6 right-8 text-6xl font-black text-foreground/30 dark:text-white/20 group-hover:text-primary/30 dark:group-hover:text-primary/40 transition-colors">
                   {project.id}
                 </span>
               </div>
 
-              <div className="absolute inset-0 p-10 flex flex-col justify-end">
+              <div className="absolute inset-0 p-6 sm:p-10 flex flex-col justify-end">
                 <motion.h3 className="text-3xl font-extrabold text-foreground mb-4 group-hover:text-primary transition-colors">
                   {project.title}
                 </motion.h3>
                 <p className="text-muted-foreground text-base max-w-sm line-clamp-2 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
                   {project.desc}
                 </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {project.tags.slice(0, 4).map((tag) => (
+                    <span key={tag} className="rounded-full border border-border bg-card/80 px-3 py-1 text-xs font-semibold text-foreground/80 backdrop-blur-md">{tag}</span>
+                  ))}
+                </div>
               </div>
             </motion.div>
           ))}
-        </div>
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       {portalRef.current && createPortal(
@@ -144,6 +215,7 @@ export function Portfolio({ selectedProject, setSelectedProject }: PortfolioProp
                       <motion.img
                         key={currentImgIdx}
                         src={getImageSrc(selectedProject, currentImgIdx)}
+                        alt={`${selectedProject.title} — image ${currentImgIdx + 1} of ${imageTotal}`}
                         initial={{ opacity: 0, scale: 1.1 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
@@ -152,20 +224,27 @@ export function Portfolio({ selectedProject, setSelectedProject }: PortfolioProp
                       />
                     </AnimatePresence>
 
-                    <div className="absolute inset-0 flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={prevImg} className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border text-foreground flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-lg">
+                    <div className="absolute inset-0 flex items-center justify-between px-4 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity pointer-events-none [&>button]:pointer-events-auto">
+                      <button onClick={prevImg} aria-label="Previous image" className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border text-foreground flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-lg">
                         <ChevronLeft size={18} />
                       </button>
-                      <button onClick={nextImg} className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border text-foreground flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-lg">
+                      <button onClick={nextImg} aria-label="Next image" className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border text-foreground flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all shadow-lg">
                         <ArrowRight size={18} />
                       </button>
                     </div>
 
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 px-3 py-1.5 rounded-full bg-card/50 backdrop-blur-md border border-border">
-                      {Array.from({ length: selectedProject.imageCount }).map((_, idx) => (
+                    {imageTotal > 1 && (
+                      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-card/70 backdrop-blur-md border border-border text-xs font-semibold tabular-nums text-foreground">
+                        {currentImgIdx + 1} / {imageTotal}
+                      </div>
+                    )}
+
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-wrap justify-center max-w-[90%] gap-2 px-3 py-1.5 rounded-full bg-card/50 backdrop-blur-md border border-border">
+                      {imageTotal > 1 && Array.from({ length: imageTotal }).map((_, idx) => (
                         <button
                           key={idx}
-                          onClick={() => setCurrentImgIdx(idx)}
+                          onClick={(e) => { e.stopPropagation(); setCurrentImgIdx(idx); }}
+                          aria-label={`Show image ${idx + 1}`}
                           className={`h-1 transition-all duration-300 rounded-full ${
                             idx === currentImgIdx ? 'w-5 bg-primary' : 'w-1.5 bg-foreground/20 hover:bg-foreground/40'
                           }`}
@@ -181,6 +260,7 @@ export function Portfolio({ selectedProject, setSelectedProject }: PortfolioProp
                       </div>
                       <button
                         onClick={closeProject}
+                        aria-label="Close"
                         className="p-3 rounded-full bg-muted border border-border text-foreground hover:bg-destructive hover:text-destructive-foreground transition-all shadow-md"
                       >
                         <X size={24} />

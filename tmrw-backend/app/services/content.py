@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session, joinedload
 
 from app.models import (
     AboutCard,
+    AppMeta,
     AdminUser,
     ContactSubmission,
     Project,
@@ -166,8 +167,90 @@ PROJECTS_SEED = [
 ]
 
 
+MOCK_SEED_KEY = "mock_projects_v1"
+
+
+def seed_mock_projects(db: Session) -> int:
+    """Insert the sample (mock) projects once. Deleted mocks are not re-created."""
+    from app.services.mock_projects import MOCK_PROJECTS_SEED
+
+    if db.get(AppMeta, MOCK_SEED_KEY):
+        return 0
+
+    next_order = (db.query(Project).count() or 0)
+    added = 0
+    for project_data in MOCK_PROJECTS_SEED:
+        slug = slugify(project_data["title"])
+        exists = db.query(Project).filter(
+            (Project.slug == slug) | (Project.project_id == project_data["project_id"])
+        ).first()
+        if exists:
+            continue
+        project = Project(
+            project_id=project_data["project_id"],
+            slug=slug,
+            title=project_data["title"],
+            category=project_data["category"],
+            short_desc=project_data["short_desc"],
+            full_desc=project_data["full_desc"],
+            gradient=project_data["gradient"],
+            image_prefix=project_data["image_prefix"],
+            image_start_index=project_data["image_start_index"],
+            image_count=project_data["image_count"],
+            sort_order=next_order + added,
+            is_mock=True,
+        )
+        db.add(project)
+        db.flush()
+        for feature_index, feature in enumerate(project_data["features"]):
+            db.add(ProjectFeature(project_id=project.id, content=feature, sort_order=feature_index))
+        for tag in project_data["tags"]:
+            db.add(ProjectTag(project_id=project.id, tag=tag))
+        added += 1
+
+    db.add(AppMeta(key=MOCK_SEED_KEY, value=str(added)))
+    db.commit()
+    return added
+
+
+MOCK_IMAGES_KEY = "mock_projects_images_v2"
+
+
+def upgrade_mock_project_images(db: Session) -> int:
+    """One-time: point existing mock rows at the real-screenshot galleries.
+
+    Only updates rows that still exist and are flagged is_mock; never re-creates
+    mocks the admin deleted. Runs once (guarded by MOCK_IMAGES_KEY)."""
+    from app.services.mock_projects import MOCK_PROJECTS_SEED
+
+    if db.get(AppMeta, MOCK_IMAGES_KEY):
+        return 0
+    updated = 0
+    for project_data in MOCK_PROJECTS_SEED:
+        slug = slugify(project_data["title"])
+        row = db.query(Project).filter(
+            Project.is_mock.is_(True),
+            (Project.slug == slug) | (Project.project_id == project_data["project_id"]),
+        ).first()
+        if not row:
+            continue
+        old_prefix = project_data["image_prefix"].replace("-real-", "-")
+        # Leave rows alone if the admin already pointed them at custom images.
+        if row.image_prefix not in (old_prefix, project_data["image_prefix"]):
+            continue
+        row.image_prefix = project_data["image_prefix"]
+        row.image_start_index = project_data["image_start_index"]
+        row.image_count = project_data["image_count"]
+        updated += 1
+    db.add(AppMeta(key=MOCK_IMAGES_KEY, value=str(updated)))
+    db.commit()
+    return updated
+
+
 def seed_database(db: Session) -> None:
     if db.query(SiteSettings).first():
+        seed_mock_projects(db)
+        upgrade_mock_project_images(db)
         return
 
     typewriter_words = json.dumps(
@@ -270,6 +353,8 @@ def seed_database(db: Session) -> None:
             db.add(ProjectTag(project_id=project.id, tag=tag))
 
     db.commit()
+    seed_mock_projects(db)
+    upgrade_mock_project_images(db)
 
 
 def project_to_dict(project: Project) -> dict:
@@ -290,6 +375,7 @@ def project_to_dict(project: Project) -> dict:
         "imageStartIndex": project.image_start_index,
         "coverImage": images[0] if images else "",
         "images": images,
+        "isMock": bool(getattr(project, "is_mock", False)),
     }
 
 
