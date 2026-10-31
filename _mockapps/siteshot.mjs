@@ -1,0 +1,14 @@
+﻿import { chromium } from 'playwright-core';
+const b = await chromium.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
+const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+await p.goto('http://localhost:5173/portfolio-website-naja/', { waitUntil: 'networkidle' });
+await p.evaluate(() => document.querySelector('#portfolio')?.scrollIntoView());
+await p.waitForTimeout(2500);
+const t = await p.$$eval('#portfolio img', (a) => a.map((i) => i.getAttribute('src')).filter((s) => s.includes('mock')));
+console.log(t.slice(0, 8));
+const sec = await p.$('#portfolio'); await sec.screenshot({ path: 'site-portfolio.png' });
+const card = await p.$('#portfolio img[src*="mock-nova"]'); await card.scrollIntoViewIfNeeded(); await card.click(); await p.waitForTimeout(1500);
+await p.keyboard.press('ArrowRight'); await p.keyboard.press('ArrowRight'); await p.waitForTimeout(1200);
+await p.screenshot({ path: 'site-popup.png' });
+console.log(await p.$$eval('img', (a) => a.map((i) => i.src).filter((s) => s.includes('real-3')).length));
+await b.close();

@@ -17,6 +17,8 @@ export interface DashboardStats {
   servicesTotal: number;
   contactsNew: number;
   contactsTotal: number;
+  projectsMock?: number;
+  recentContacts?: Array<{ id: number; name: string; email: string; service: string; status: string; createdAt: string }>;
 }
 
 export interface AdminProject {
@@ -33,6 +35,7 @@ export interface AdminProject {
   imageCount: number;
   sortOrder: number;
   isPublished: boolean;
+  isMock?: boolean;
   features: string[];
   tags: string[];
   imageUrls: string[];
@@ -70,6 +73,13 @@ export interface SiteSettings {
   workingHours: string;
   logoUrl: string;
   socialLinks: Array<{ platform: string; label: string; href: string }>;
+}
+
+export interface MediaItem {
+  url: string;
+  filename: string;
+  size: number;
+  modifiedAt: string;
 }
 
 export interface UploadResponse {

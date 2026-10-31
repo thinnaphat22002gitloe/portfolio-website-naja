@@ -28,6 +28,7 @@ def project_admin_to_dict(project: Project) -> dict:
         "imageCount": project.image_count,
         "sortOrder": project.sort_order,
         "isPublished": project.is_published,
+        "isMock": bool(project.is_mock),
         "features": base["features"],
         "tags": base["tags"],
         "imageUrls": base["images"],
@@ -47,6 +48,35 @@ def _apply_project_relations(db: Session, project: Project, features: list[str],
 
     for index, url in enumerate(image_urls):
         db.add(ProjectImage(project_id=project.id, url=url, sort_order=index))
+
+
+def _unique_slug(db: Session, title: str, exclude_id: int | None = None) -> str:
+    base = slugify(title)
+    candidate, n = base, 2
+    while True:
+        query = db.query(Project).filter(Project.slug == candidate)
+        if exclude_id is not None:
+            query = query.filter(Project.id != exclude_id)
+        if not query.first():
+            return candidate
+        candidate = f"{base}-{n}"
+        n += 1
+
+
+def project_id_taken(db: Session, project_code: str, exclude_id: int | None = None) -> bool:
+    query = db.query(Project).filter(Project.project_id == project_code)
+    if exclude_id is not None:
+        query = query.filter(Project.id != exclude_id)
+    return query.first() is not None
+
+
+def reorder_projects(db: Session, ordered_ids: list[int]) -> list[dict]:
+    projects = {project.id: project for project in db.query(Project).all()}
+    for index, pid in enumerate(ordered_ids):
+        if pid in projects:
+            projects[pid].sort_order = index
+    db.commit()
+    return list_all_projects(db)
 
 
 def list_all_projects(db: Session) -> list[dict]:
@@ -74,7 +104,7 @@ def get_admin_project(db: Session, project_id: int) -> dict | None:
 def create_project(db: Session, payload: dict) -> dict:
     project = Project(
         project_id=payload["projectId"],
-        slug=slugify(payload["title"]),
+        slug=_unique_slug(db, payload["title"]),
         title=payload["title"],
         category=payload["category"],
         short_desc=payload["shortDesc"],
@@ -85,6 +115,7 @@ def create_project(db: Session, payload: dict) -> dict:
         image_count=payload.get("imageCount", 1),
         sort_order=payload.get("sortOrder", 0),
         is_published=payload.get("isPublished", True),
+        is_mock=payload.get("isMock", False),
     )
     db.add(project)
     db.flush()
@@ -119,6 +150,7 @@ def update_project(db: Session, project_id: int, payload: dict) -> dict | None:
         "imageCount": "image_count",
         "sortOrder": "sort_order",
         "isPublished": "is_published",
+        "isMock": "is_mock",
     }
 
     for key, attr in field_map.items():
@@ -126,7 +158,7 @@ def update_project(db: Session, project_id: int, payload: dict) -> dict | None:
             setattr(project, attr, payload[key])
 
     if payload.get("title"):
-        project.slug = slugify(project.title)
+        project.slug = _unique_slug(db, project.title, exclude_id=project.id)
 
     features = payload.get("features")
     tags = payload.get("tags")
@@ -269,7 +301,21 @@ def get_dashboard_stats(db: Session) -> dict:
     services_total = db.query(Service).count()
     contacts_total = db.query(ContactSubmission).count()
     contacts_new = db.query(ContactSubmission).filter(ContactSubmission.status == "new").count()
+    projects_mock = db.query(Project).filter(Project.is_mock.is_(True)).count()
+    recent = db.query(ContactSubmission).order_by(ContactSubmission.created_at.desc()).limit(5).all()
     return {
+        "projectsMock": projects_mock,
+        "recentContacts": [
+            {
+                "id": item.id,
+                "name": f"{item.first_name} {item.last_name}".strip(),
+                "email": item.email,
+                "service": item.service,
+                "status": item.status,
+                "createdAt": item.created_at,
+            }
+            for item in recent
+        ],
         "projectsTotal": projects_total,
         "projectsPublished": projects_published,
         "servicesTotal": services_total,

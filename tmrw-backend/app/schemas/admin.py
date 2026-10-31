@@ -27,6 +27,8 @@ class DashboardStats(BaseModel):
     servicesTotal: int
     contactsNew: int
     contactsTotal: int
+    projectsMock: int = 0
+    recentContacts: list[dict] = Field(default_factory=list)
 
 
 class ProjectAdminOut(BaseModel):
@@ -43,6 +45,7 @@ class ProjectAdminOut(BaseModel):
     imageCount: int
     sortOrder: int
     isPublished: bool
+    isMock: bool = False
     features: list[str]
     tags: list[str]
     imageUrls: list[str]
@@ -60,6 +63,7 @@ class ProjectCreate(BaseModel):
     imageCount: int = 1
     sortOrder: int = 0
     isPublished: bool = True
+    isMock: bool = False
     features: list[str] = Field(default_factory=list)
     tags: list[str] = Field(default_factory=list)
     imageUrls: list[str] = Field(default_factory=list)
@@ -77,6 +81,7 @@ class ProjectUpdate(BaseModel):
     imageCount: int | None = None
     sortOrder: int | None = None
     isPublished: bool | None = None
+    isMock: bool | None = None
     features: list[str] | None = None
     tags: list[str] | None = None
     imageUrls: list[str] | None = None
@@ -152,3 +157,14 @@ class SiteSettingsOut(BaseModel):
 class UploadResponse(BaseModel):
     url: str
     filename: str
+
+
+class ProjectReorder(BaseModel):
+    ids: list[int]
+
+
+class MediaItem(BaseModel):
+    url: str
+    filename: str
+    size: int
+    modifiedAt: datetime

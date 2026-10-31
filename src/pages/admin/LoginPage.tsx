@@ -5,13 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Lock } from 'lucide-react';
 
 export function AdminLoginPage() {
   const { login, isAuthenticated, isLoading } = useAdminAuth();
   const { toast } = useToast();
-  const [email, setEmail] = useState('admin@tmrw.unlimited');
-  const [password, setPassword] = useState('changeme123');
+  const [email, setEmail] = useState(import.meta.env.DEV ? 'admin@tmrw.unlimited' : '');
+  const [password, setPassword] = useState(import.meta.env.DEV ? 'changeme123' : '');
   const [submitting, setSubmitting] = useState(false);
 
   if (isLoading) {
@@ -44,8 +44,13 @@ export function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-6">
-      <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-xl space-y-6">
+    <div className="relative min-h-screen flex items-center justify-center bg-background px-6 overflow-hidden">
+      <div aria-hidden className="pointer-events-none absolute -top-40 -left-40 h-[520px] w-[520px] rounded-full bg-primary/25 blur-[120px]" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-40 -right-40 h-[520px] w-[520px] rounded-full bg-[#6c63ff]/25 blur-[120px]" />
+      <div className="relative w-full max-w-md rounded-3xl border border-border bg-card/80 backdrop-blur-xl p-8 shadow-2xl space-y-6">
+        <div className="mx-auto h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-[#e8405a] flex items-center justify-center shadow-lg shadow-primary/30">
+          <Lock className="h-6 w-6 text-white" />
+        </div>
         <div className="space-y-2 text-center">
           <p className="text-xs uppercase tracking-[0.3em] text-primary font-bold">TMRW UNLIMIT</p>
           <h1 className="text-2xl font-bold">Admin Login</h1>
@@ -65,6 +70,12 @@ export function AdminLoginPage() {
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Sign In'}
           </Button>
         </form>
+
+        {import.meta.env.DEV && (
+          <p className="text-center text-xs text-muted-foreground rounded-xl border border-dashed border-border p-3">
+            Dev mode: credentials come from <code>tmrw-backend/.env</code> (ADMIN_EMAIL / ADMIN_PASSWORD).
+          </p>
+        )}
 
         <p className="text-center text-sm text-muted-foreground">
           <Link href="/" className="text-primary hover:underline">Back to website</Link>

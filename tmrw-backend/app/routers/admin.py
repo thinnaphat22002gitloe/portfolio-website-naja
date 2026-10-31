@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile, status
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -21,8 +21,12 @@ from app.schemas.admin import (
     TokenResponse,
     UploadResponse,
     AdminUserOut,
+    MediaItem,
+    ProjectReorder,
 )
 from app.services.admin_content import (
+    project_id_taken,
+    reorder_projects,
     create_project,
     create_service,
     delete_project,
@@ -39,17 +43,26 @@ from app.services.admin_content import (
     update_site_settings,
 )
 from app.services.auth import authenticate_admin, create_access_token
-from app.services.upload import save_upload_file
+from app.services.upload import list_uploads, save_upload_file
+from app.services.ratelimit import login_limiter
 
 router = APIRouter(prefix="/api/v1/admin", tags=["admin"])
 
 
 @router.post("/auth/login", response_model=TokenResponse)
-def login(payload: LoginRequest, db: Session = Depends(get_db)) -> TokenResponse:
+def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)) -> TokenResponse:
+    client_key = f"{request.client.host if request.client else 'unknown'}:{payload.email.lower()}"
+    if login_limiter.is_blocked(client_key):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many failed login attempts. Please try again in a few minutes.",
+        )
     admin = authenticate_admin(db, payload.email, payload.password)
     if not admin:
+        login_limiter.register_failure(client_key)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
 
+    login_limiter.reset(client_key)
     token = create_access_token(admin.email)
     return TokenResponse(accessToken=token, expiresInMinutes=settings.jwt_expire_minutes)
 
@@ -69,6 +82,15 @@ def admin_list_projects(_: AdminUser = Depends(get_current_admin), db: Session =
     return [ProjectAdminOut(**project) for project in list_all_projects(db)]
 
 
+@router.post("/projects/reorder", response_model=list[ProjectAdminOut])
+def admin_reorder_projects(
+    payload: ProjectReorder,
+    _: AdminUser = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+) -> list[ProjectAdminOut]:
+    return [ProjectAdminOut(**project) for project in reorder_projects(db, payload.ids)]
+
+
 @router.get("/projects/{project_id}", response_model=ProjectAdminOut)
 def admin_get_project(project_id: int, _: AdminUser = Depends(get_current_admin), db: Session = Depends(get_db)) -> ProjectAdminOut:
     project = get_admin_project(db, project_id)
@@ -83,6 +105,8 @@ def admin_create_project(
     _: AdminUser = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ) -> ProjectAdminOut:
+    if project_id_taken(db, payload.projectId):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Project ID '{payload.projectId}' is already used")
     project = create_project(db, payload.model_dump())
     return ProjectAdminOut(**project)
 
@@ -94,6 +118,8 @@ def admin_update_project(
     _: AdminUser = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ) -> ProjectAdminOut:
+    if payload.projectId and project_id_taken(db, payload.projectId, exclude_id=project_id):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Project ID '{payload.projectId}' is already used")
     project = update_project(db, project_id, payload.model_dump(exclude_unset=True))
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
@@ -185,3 +211,8 @@ async def admin_upload(
 ) -> UploadResponse:
     url, filename = await save_upload_file(file)
     return UploadResponse(url=url, filename=filename)
+
+
+@router.get("/media", response_model=list[MediaItem])
+def admin_list_media(_: AdminUser = Depends(get_current_admin)) -> list[MediaItem]:
+    return [MediaItem(**item) for item in list_uploads()]

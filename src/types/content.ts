@@ -55,6 +55,7 @@ export interface Project {
   imageStartIndex: number;
   coverImage: string;
   images: string[];
+  isMock?: boolean;
 }
 
 export interface PortfolioContent {

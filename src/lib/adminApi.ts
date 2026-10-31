@@ -5,6 +5,7 @@ import type {
   AdminService,
   AdminUser,
   DashboardStats,
+  MediaItem,
   ProjectPayload,
   ServicePayload,
   SiteSettings,
@@ -156,4 +157,15 @@ export async function uploadAdminFile(file: File): Promise<UploadResponse> {
     method: 'POST',
     body: formData,
   });
+}
+
+export async function reorderAdminProjects(ids: number[]): Promise<AdminProject[]> {
+  return adminRequest<AdminProject[]>('/api/v1/admin/projects/reorder', {
+    method: 'POST',
+    body: JSON.stringify({ ids }),
+  });
+}
+
+export async function fetchAdminMedia(): Promise<MediaItem[]> {
+  return adminRequest<MediaItem[]>('/api/v1/admin/media');
 }

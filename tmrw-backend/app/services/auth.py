@@ -1,3 +1,5 @@
+import logging
+
 import bcrypt
 from datetime import UTC, datetime, timedelta
 
@@ -6,6 +8,9 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.models import AdminUser
+
+logger = logging.getLogger(__name__)
+WEAK_DEFAULT_PASSWORDS = {"changeme123", "admin", "password", "123456"}
 
 
 def hash_password(password: str) -> str:
@@ -42,6 +47,16 @@ def seed_admin_user(db: Session) -> None:
     existing = db.query(AdminUser).filter(AdminUser.email == settings.admin_email).first()
     if existing:
         return
+    if db.query(AdminUser).count() > 0 and not settings.admin_password:
+        return
+    if not settings.admin_password:
+        logger.warning(
+            "ADMIN_PASSWORD is not set - no admin account created. "
+            "Copy tmrw-backend/.env.example to tmrw-backend/.env and set ADMIN_EMAIL / ADMIN_PASSWORD."
+        )
+        return
+    if settings.is_production and settings.admin_password in WEAK_DEFAULT_PASSWORDS:
+        raise RuntimeError("Refusing to create the production admin with the documented dev password. Set ADMIN_PASSWORD.")
 
     db.add(
         AdminUser(

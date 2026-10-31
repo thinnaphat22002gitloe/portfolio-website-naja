@@ -470,3 +470,27 @@ html {
     inset: -1px;
   }
 }
+/* ---------- Motion utilities (added) ---------- */
+@keyframes marquee-x { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee-x 40s linear infinite; }
+.marquee-reverse { animation-direction: reverse; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+@keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+.animate-float { animation: float-y 6s ease-in-out infinite; }
+.animate-float-slow { animation: float-y 9s ease-in-out infinite; }
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin-slow 40s linear infinite; }
+
+.hero-grid {
+  background-image:
+    linear-gradient(to right, hsl(var(--foreground) / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--foreground) / 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 75%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track, .animate-float, .animate-float-slow, .animate-spin-slow { animation: none !important; }
+}
